@@ -5,6 +5,8 @@ import reactLogo from './assets/react.svg'
 import 'bulma/css/bulma.min.css';
 import { MetricTypes, Metric, MetricComponentProps} from './cards/metrics'
 import { Form, Card } from 'react-bulma-components';
+import { Haveibeenpwned } from '../components/Haveibeenpwned'
+import { PasswordMeter} from '../components/PasswordMeter'
 
 import ZbcvbnMetric from './cards/zxcvbn';
 import LengthMetric from './cards/length'
@@ -89,7 +91,20 @@ function App() {
         </Form.Field>
 
         <p>{comment}</p>
+        <div className='col-sm'>
+        <Card style={{ marginTop: 32 }}>
+          <Haveibeenpwned password={password} />
+        </Card>
+        <div className='col-sm'>
+          <Card  style={{ marginTop: 32 }}>
+            <PasswordMeter password={password} />
+          </Card>
+        </div>
       </div>
+      
+      </div>
+
+      
 
       <div className="cards-holder">
         {ZbcvbnMetric.cardComponent({ 
