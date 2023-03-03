@@ -3,6 +3,7 @@ import sha1 from "sha1";
 import axios from "axios";
 import textsuccess from "../src/index.scss";
 import textdanger from "../src/index.scss";
+import textslightdanger from "../src/index.scss";
 
 export const Haveibeenpwned = ({ password }) => {
     const [hashNum, setHashNum] = useState()
@@ -41,7 +42,14 @@ export const Haveibeenpwned = ({ password }) => {
             <h5 className='textsuccess'>Your password has not appeared in data breaches before!</h5>
           </div>
         )
-    }else if(hashNum > 0 ) {
+    }else if(hashNum >= 0 && hashNum <= 100 ) {
+      return (
+          <div>
+            <h5 className='textslightdanger'>Your password has appeared <strong>{hashNum}</strong> times in data breaches before!</h5>
+          </div>
+      )
+  }
+    else if(hashNum > 100 ) {
         return (
             <div>
               <h5 className='textdanger'>Your password has appeared <strong>{hashNum}</strong> times in data breaches before!</h5>
