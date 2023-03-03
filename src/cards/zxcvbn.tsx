@@ -47,6 +47,7 @@ const metric: Metric = {
       result.crack_times_seconds.offline_slow_hashing_1e4_per_second
     )
   }
+  
 }
 
 export default metric
