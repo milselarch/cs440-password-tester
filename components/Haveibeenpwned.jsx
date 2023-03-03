@@ -42,7 +42,7 @@ export const Haveibeenpwned = ({ password }) => {
             <h5 className='textsuccess'>Your password has not appeared in data breaches before!</h5>
           </div>
         )
-    }else if(hashNum >= 0 && hashNum <= 100 ) {
+    }else if(hashNum > 0 && hashNum <= 100 ) {
       return (
           <div>
             <h5 className='textslightdanger'>Your password has appeared <strong>{hashNum}</strong> times in data breaches before!</h5>
