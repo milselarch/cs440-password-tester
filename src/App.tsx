@@ -5,9 +5,14 @@ import reactLogo from './assets/react.svg'
 import 'bulma/css/bulma.min.css';
 import { MetricTypes, Metric, MetricComponentProps} from './cards/metrics'
 import { Form, Card } from 'react-bulma-components';
+import { Haveibeenpwned } from '../components/Haveibeenpwned'
+import { PasswordMeter} from '../components/PasswordMeter'
+import { PasswordStrengthMeter } from '../components/PasswordStrengthMeter'
+import { Zxcvbn } from '../components/Zxcvbn'
 
 import ZbcvbnMetric from './cards/zxcvbn';
-import LengthMetric from './cards/length'
+import LengthMetric from './cards/length';
+import DictionaryMetric from './cards/dictionary';
 
 // const HASH_RATE = 100e6; // assume 100M hash/s hash rate
 
@@ -18,15 +23,41 @@ function formatDuration(duration: number) {
   return `${hours}hr ${minutes}m ${seconds}s`;
 }
 
-const metricsList: Metric[] = [ZbcvbnMetric, LengthMetric]
+
+
+const metricsList: Metric[] = [ZbcvbnMetric, LengthMetric, DictionaryMetric]
 const defaultMetric = ZbcvbnMetric
 
 function App() {
   const [comment, setComment] = useState('');
   const [password, setPassword] = useState('');
+  const [algo, setAlgo] = useState('');
   const [activeMetric, setActiveMetric] = useState<Metric>(
     defaultMetric
   )
+
+  function renderMetricCard() {
+    if (activeMetric === ZbcvbnMetric) {
+      return (
+          <Card style={{ marginTop: 32 }}>
+            <PasswordStrengthMeter password = { password} />
+            <Zxcvbn password={password} />
+          </Card>
+      );
+    } else if (activeMetric === DictionaryMetric) {
+      return (
+        <Card style={{ marginTop: 32 }}>
+          <Haveibeenpwned password={password} />
+        </Card>
+      );
+    } else if (activeMetric === LengthMetric){
+      return(
+        <Card style={{ marginTop: 32 }}>
+        <PasswordMeter password={password} />
+      </Card>
+      );
+   }
+  }
 
   const loadPasswordDuration = (
     password: string, activeMetric: MetricTypes
@@ -75,7 +106,6 @@ function App() {
           "marginBottom": "1rem",
           "fontSize": "2rem"
         }}>Password Strength Tester</h1>
-
         <Form.Field>
           <Form.Input 
             className="is-dark"
@@ -87,10 +117,9 @@ function App() {
             }}
           />
         </Form.Field>
-
         <p>{comment}</p>
+        
       </div>
-
       <div className="cards-holder">
         {ZbcvbnMetric.cardComponent({ 
           'active': activeMetric.type == ZbcvbnMetric.type,
@@ -100,11 +129,28 @@ function App() {
           'active': activeMetric.type == LengthMetric.type,
           onSelect: () => { onMetricUpdate(LengthMetric) } 
         })}
+        {DictionaryMetric.cardComponent({ 
+          'active': activeMetric.type == DictionaryMetric.type,
+          onSelect: () => { onMetricUpdate(DictionaryMetric) } 
+        })}
       </div>
-
+        {/* <div className='col-sm'>
+        <Card style={{ marginTop: 32 }}>
+          <Haveibeenpwned password={password} />
+        </Card>
+        <div className='col-sm'>
+          <Card  style={{ marginTop: 32 }}>
+            <PasswordMeter password={password} />
+          </Card>
+        </div>
+      </div> */}
+      <div className='col-sm'>
+        {renderMetricCard()}
+      </div>
       <div style={{margin: "2rem"}}>
         {activeMetric.descriptionComponent()}
       </div>
+      
     </div>
   )
 }

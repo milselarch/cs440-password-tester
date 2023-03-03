@@ -1,6 +1,7 @@
 enum MetricTypes {
     zxcvbn,
-    entropy
+    entropy,
+    dictionary
 }
 
 interface MetricComponentProps {

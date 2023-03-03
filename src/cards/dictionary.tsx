@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { MetricTypes, Metric, MetricComponentProps } from './metrics'
 import { Card } from 'react-bulma-components';
 
-import zxcvbn from 'zxcvbn';
 import classNames from 'classnames';
 
 function CardRenderer(props: MetricComponentProps) {
@@ -20,34 +19,32 @@ function CardRenderer(props: MetricComponentProps) {
         }}>
           <h2 style={{
             fontSize: "2rem", fontFamily: "Bebas Neue"
-          }}> ZXCVBN </h2>
+          }}> Dictionary </h2>
           <p> 
-            ZXCVBN is an algorithm designed by Dropbox 
-            that analyzes a password and gives it a rating
-            based on how hard it is for hacking software to guess. 
+            The more common the password is, the less protected it is
           </p>
         </Card.Content>
       </Card>
     )
 }
 
+const HASH_RATE = 100e6; // assume 100M hash/s hash rate
+
 function DescriptionRenderer() {
   return (
-    <p> ZXCVBN is an algorithm designed by Dropbox </p>
+    <p> The longer the password, the more possible combinations </p>
   )
 }
 
 const metric: Metric = {
-  type: MetricTypes.zxcvbn,
+  type: MetricTypes.dictionary,
   cardComponent: CardRenderer,
   descriptionComponent: DescriptionRenderer,
   calculator: (password: string) => {
-    const result = zxcvbn(password);
-    return Number(
-      result.crack_times_seconds.offline_slow_hashing_1e4_per_second
-    )
+    const hashesNeeded = 26 ** (password.length);
+    const duration = hashesNeeded / HASH_RATE;
+    return duration;
   }
-  
 }
 
 export default metric
