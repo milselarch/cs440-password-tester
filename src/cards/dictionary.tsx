@@ -32,7 +32,7 @@ const HASH_RATE = 100e6; // assume 100M hash/s hash rate
 
 function DescriptionRenderer() {
   return (
-    <p> The longer the password, the more possible combinations </p>
+    <p> The more common the password, the easier the guess of the password</p>
   )
 }
 
