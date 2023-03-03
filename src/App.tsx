@@ -95,17 +95,7 @@ function App() {
         <Card style={{ marginTop: 32 }}>
           <Haveibeenpwned password={password} />
         </Card>
-        <div className='col-sm'>
-          <Card  style={{ marginTop: 32 }}>
-            <PasswordMeter password={password} />
-          </Card>
-        </div>
-      </div>
-      
-      </div>
-
-      
-
+        
       <div className="cards-holder">
         {ZbcvbnMetric.cardComponent({ 
           'active': activeMetric.type == ZbcvbnMetric.type,
@@ -120,6 +110,15 @@ function App() {
       <div style={{margin: "2rem"}}>
         {activeMetric.descriptionComponent()}
       </div>
+        <div className='col-sm'>
+          <Card  style={{ marginTop: 32 }}>
+            <PasswordMeter password={password} />
+          </Card>
+        </div>
+      </div>
+      
+      </div>
+
     </div>
   )
 }
