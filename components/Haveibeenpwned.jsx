@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import sha1 from "sha1";
 import axios from "axios";
-
+import textsuccess from "../src/index.scss";
+import textdanger from "../src/index.scss";
 
 export const Haveibeenpwned = ({ password }) => {
     const [hashNum, setHashNum] = useState()
@@ -12,6 +13,7 @@ export const Haveibeenpwned = ({ password }) => {
     useEffect(() => {
       returnNumber()
     }, [password])
+    
 
     const returnNumber = () => {
         axios.get(link)
@@ -36,13 +38,13 @@ export const Haveibeenpwned = ({ password }) => {
     if (hashNum == 0 && password !==""){
         return (
           <div>
-            <h5 className='text-center my-2 text-success'>Your password has not appeared in data breaches before!</h5>
+            <h5 className='textsuccess'>Your password has not appeared in data breaches before!</h5>
           </div>
         )
     }else if(hashNum > 0 ) {
         return (
             <div>
-              <h5 className='text-center my-2 text-danger'>Your password has appeared <strong>{hashNum}</strong> times in data breaches before!</h5>
+              <h5 className='textdanger'>Your password has appeared <strong>{hashNum}</strong> times in data breaches before!</h5>
             </div>
         )
     }
