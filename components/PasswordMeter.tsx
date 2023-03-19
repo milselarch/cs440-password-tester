@@ -1,53 +1,56 @@
 import React, { useState } from "react"
 
-export const PasswordMeter = ({ password }) => {
+export const PasswordMeter = (
+  {password} : {password: string}
+) => {
   console.log("Component loaded")
 
-  const password_length_score = (password) => {
+  const password_length_score = (password: string) => {
     return password.length * 4
   }
-  const uppercase_letters = (password) => {
+  const uppercase_letters = (password: string) => {
+    console.log("PASS", [password])
     var occur = password.length - password.replace(/[A-Z]/g, "").length
     return occur
   }
 
-  const uppercase_letters_score = (password) => {
+  const uppercase_letters_score = (password: string) => {
     return uppercase_letters(password) * 2
   }
 
-  const lowercase_letters = (password) => {
+  const lowercase_letters = (password: string) => {
     var occur = password.length - password.replace(/[a-z]/g, "").length
     return occur
   }
 
-  const lowercase_letters_score = (password) => {
+  const lowercase_letters_score = (password: string) => {
     return lowercase_letters(password) * 2
   }
 
-  const letters = (password) => {
+  const letters = (password: string) => {
     return uppercase_letters(password) + lowercase_letters(password)
   }
 
-  const numbers = (password) => {
+  const numbers = (password: string) => {
     var numCount = password.length - password.replace(/[0-9]/g, "").length
     return numCount
   }
 
-  const numbers_score = (password) => {
+  const numbers_score = (password: string) => {
     return numbers(password) * 4
   }
 
-  const symbols = (password) => {
+  const symbols = (password: string) => {
     var specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gi
     var allFoundCharacters = password.match(specialChars)
     return allFoundCharacters ? allFoundCharacters.length : 0
   }
 
-  const symbols_score = (password) => {
+  const symbols_score = (password: string) => {
     return symbols(password) * 6
   }
 
-  const Letters_Only = (password) => {
+  const Letters_Only = (password: string) => {
     return uppercase_letters(password) + lowercase_letters(password) >= 1 &&
       numbers(password) === 0 &&
       symbols(password) === 0
@@ -55,11 +58,11 @@ export const PasswordMeter = ({ password }) => {
       : false
   }
 
-  const Letters_Only_score = (password) => {
+  const Letters_Only_score = (password: string) => {
     return Letters_Only(password) ? -password.length : 0
   }
 
-  const Numbers_Only = (password) => {
+  const Numbers_Only = (password: string) => {
     return uppercase_letters(password) + lowercase_letters(password) === 0 &&
       numbers(password) >= 1 &&
       symbols(password) === 0
@@ -67,23 +70,18 @@ export const PasswordMeter = ({ password }) => {
       : false
   }
 
-  const Numbers_Only_score = (password) => {
+  const Numbers_Only_score = (password: string) => {
     return Numbers_Only(password) ? -password.length : 0
   }
 
-  function isNumber(n) {
+  function isNumber(n: any): boolean {
     return !isNaN(parseInt(n)) && !isNaN(n - 0)
   }
 
-  const consecutive_numbers = (password) => {
+  const consecutive_numbers = (password: string) => {
     let arr = password.split("")
     let count = 0
 
-    for (var i = 0; i < arr.length; i += 1) {
-      if (isNumber(arr[i])) {
-        arr[i] = parseInt(arr[i])
-      }
-    }
     for (var i = 0; i < arr.length; i += 1) {
       if (isNumber(arr[i]) && isNumber(arr[i + 1])) {
         count++
@@ -92,32 +90,25 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const consecutive_numbers_score = (password) => {
+  const consecutive_numbers_score = (password: string) => {
     return -consecutive_numbers(password) * 2
   }
 
-  const sequential_numbers = (password) => {
-    let arr = password.split("")
+  const sequential_numbers = (password: string) => {
+    const arr = password.split("")
     let count = 0
 
-    for (var i = 0; i < arr.length; i += 1) {
-      if (isNumber(arr[i])) {
-        arr[i] = parseInt(arr[i])
-      }
-    }
     for (var i = 0; i < arr.length - 1; i += 1) {
-      if (
-        isNumber(arr[i]) &&
-        isNumber(arr[i + 1]) &&
-        (arr[i] - 1 === arr[i + 1] || arr[i] + 1 === arr[i + 1])
-      ) {
-        count++
-      }
+      if (!(isNumber(arr[i]) && isNumber(arr[i + 1]))) { continue }
+
+      const currentNumber = parseInt(arr[i])
+      const nextNumber = parseInt(arr[i+1])
+      if (currentNumber + 1 === nextNumber) { count++ }
     }
     return count
   }
 
-  const sequential_numbers_score = (password) => {
+  const sequential_numbers_score = (password: string) => {
     return -sequential_numbers(password) * 2
   }
 
@@ -125,7 +116,7 @@ export const PasswordMeter = ({ password }) => {
     return !/[a-z]/.test(str) && /[A-Z]/.test(str)
   }
 
-  const consecutive_uppercase = (password) => {
+  const consecutive_uppercase = (password: string) => {
     let arr = password.split("")
     let count = 0
 
@@ -137,7 +128,7 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const consecutive_upper_score = (password) => {
+  const consecutive_upper_score = (password: string) => {
     return -consecutive_uppercase(password) * 2
   }
 
@@ -145,7 +136,7 @@ export const PasswordMeter = ({ password }) => {
     return !/[A-Z]/.test(str) && /[a-z]/.test(str)
   }
 
-  const consecutive_lowercase = (password) => {
+  const consecutive_lowercase = (password: string) => {
     let arr = password.split("")
     let count = 0
 
@@ -157,7 +148,7 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const consecutive_lowercase_score = (password) => {
+  const consecutive_lowercase_score = (password: string) => {
     return -consecutive_lowercase(password) * 2
   }
 
@@ -167,7 +158,7 @@ export const PasswordMeter = ({ password }) => {
     )
   }
 
-  const lowercase_sequential_count = (password) => {
+  const lowercase_sequential_count = (password: string) => {
     let count = 0
     password = password.toLowerCase()
     for (var i = 0; i < password.length; i += 1) {
@@ -178,11 +169,11 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const letters_sequential_score = (password) => {
+  const letters_sequential_score = (password: string) => {
     return -lowercase_sequential_count(password) * 2
   }
 
-  const score = (password) => {
+  const score = (password: string) => {
     let score_val =
       password_length_score(password) +
       uppercase_letters_score(password) +
@@ -203,7 +194,7 @@ export const PasswordMeter = ({ password }) => {
     return parseInt(score_val) + "%"
   }
 
-  const complexity_text = (password) => {
+  const complexity_text = (password: string) => {
     /*
     Empty string: Enter a value
     0-19: very weak
@@ -226,7 +217,7 @@ export const PasswordMeter = ({ password }) => {
     return "Very Weak"
   }
 
-  const funcProgressColor = (password) => {
+  const funcProgressColor = (password: string) => {
     
     if (password.length <= 2)
       return "#828282"; // grey
