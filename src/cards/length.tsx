@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { MetricTypes, Metric, MetricComponentProps } from './metrics'
 import { Card } from 'react-bulma-components';
+import { HashRates } from '../hash_rates'
 
 import classNames from 'classnames';
 
@@ -30,8 +31,6 @@ function CardRenderer(props: MetricComponentProps) {
     )
 }
 
-const HASH_RATE = 100e6; // assume 100M hash/s hash rate
-
 function DescriptionRenderer() {
   return (
     <p> The longer the password, the more possible combinations </p>
@@ -42,7 +41,18 @@ const metric: Metric = {
   type: MetricTypes.entropy,
   cardComponent: CardRenderer,
   descriptionComponent: DescriptionRenderer,
-  calculator: (password: string) => {
+  calculator: (password: string, hashrate: HashRates) => {
+    let HASH_RATE = 1;
+    if (hashrate === HashRates.hundred_per_hour) {
+      HASH_RATE = 100/3600
+    } else if (hashrate === HashRates.ten_per_second) {
+      HASH_RATE = 10
+    } else if (hashrate === HashRates.ten_thousand_per_second) {
+      HASH_RATE = 10000
+    } else if (hashrate === HashRates.ten_billion_per_second) {
+      HASH_RATE = 1e10
+    }
+
     const hashesNeeded = 26 ** (password.length);
     const duration = hashesNeeded / HASH_RATE;
     return duration;

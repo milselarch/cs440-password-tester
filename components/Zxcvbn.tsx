@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react"
 import zxcvbn from "zxcvbn"
-import frequency_lists from "../components/zxcvbn/frequency_lists"
-import sequences from "../components/zxcvbn/sequences"
+import frequency_lists from "./zxcvbn/frequency_lists"
+import sequences from "./zxcvbn/sequences"
 
-export const Zxcvbn = ({ password }) => {
+export const Zxcvbn = (
+  { password }: { password: string }
+) => {
   console.log({ password })
   var evaluation = zxcvbn(password)
-  var common_words_array = []
+  var common_words_array: Array<string> = []
   const [common_words, set_common_words] = useState("")
   const [date_found, set_date_found] = useState(false)
   const [sequence_found, set_sequence_found] = useState(false)
@@ -70,7 +72,7 @@ export const Zxcvbn = ({ password }) => {
     <div>
       <h3 className='text-center my-2'>zxcvbn Algorithm</h3>
       <table className='table'>
-        <thead class='thead-dark'>
+        <thead className='thead-dark'>
           <tr>
             <th>Processing Speed</th>
             <th>Time to Crack</th>
@@ -130,10 +132,10 @@ export const Zxcvbn = ({ password }) => {
       </table>
 
       <table className='table'>
-        <thead class='thead-dark'>
+        <thead className='thead-dark'>
           <tr>
-            <th>zxcvbn Evaluation</th>
-            <th>Result</th>
+            <th style={{ width: "50%" }}>zxcvbn Evaluation</th>
+            <th style={{ width: "50%" }}>Result</th>
           </tr>
         </thead>
         <tbody>
@@ -157,7 +159,7 @@ export const Zxcvbn = ({ password }) => {
       </table>
 
       <table className='table'>
-        <thead class='thead-dark'>
+        <thead className='thead-dark'>
           <tr>
             <th>Evaluation Method</th>
             <th>Result</th>

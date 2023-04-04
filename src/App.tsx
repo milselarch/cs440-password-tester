@@ -9,12 +9,16 @@ import { Haveibeenpwned } from '../components/Haveibeenpwned'
 import { PasswordMeter} from '../components/PasswordMeter'
 import { PasswordStrengthMeter } from '../components/PasswordStrengthMeter'
 import { Zxcvbn } from '../components/Zxcvbn'
+import { HashRates } from './hash_rates'
 
 import ZbcvbnMetric from './cards/zxcvbn';
 import LengthMetric from './cards/length';
 import DictionaryMetric from './cards/dictionary';
+import metric from './cards/zxcvbn';
 
 // const HASH_RATE = 100e6; // assume 100M hash/s hash rate
+const Field = Form.Field
+const RadioButton = Form.Radio
 
 function formatDuration(duration: number) {
   const hours = Math.floor(duration / 3600);
@@ -23,8 +27,6 @@ function formatDuration(duration: number) {
   return `${hours}hr ${minutes}m ${seconds}s`;
 }
 
-
-
 const metricsList: Metric[] = [ZbcvbnMetric, LengthMetric, DictionaryMetric]
 const defaultMetric = ZbcvbnMetric
 
@@ -32,6 +34,7 @@ function App() {
   const [comment, setComment] = useState('');
   const [password, setPassword] = useState('');
   const [algo, setAlgo] = useState('');
+  const [hashRate, setHashRate] = useState(HashRates.hundred_per_hour);
   const [activeMetric, setActiveMetric] = useState<Metric>(
     defaultMetric
   )
@@ -39,10 +42,10 @@ function App() {
   function renderMetricCard() {
     if (activeMetric === ZbcvbnMetric) {
       return (
-          <Card style={{ marginTop: 32 }}>
-            <PasswordStrengthMeter password = { password} />
-            <Zxcvbn password={password} />
-          </Card>
+        <Card style={{ marginTop: 32 }}>
+          <PasswordStrengthMeter password = { password} />
+          <Zxcvbn password={password} />
+        </Card>
       );
     } else if (activeMetric === DictionaryMetric) {
       return (
@@ -68,7 +71,24 @@ function App() {
     // according to the currently selected metric 
     for (let metric of metricsList) {
       if (metric.type.valueOf() == activeMetric.valueOf()) {
-        duration = metric.calculator(password)
+        duration = metric.calculator(password, hashRate)
+        break
+      }
+    }
+
+    let formattedDuration = formatDuration(duration)
+    setComment(`Cracking this password takes ${formattedDuration}`)
+  }
+
+  const updateHashRate = (newHashRate: HashRates) => {
+    setHashRate(newHashRate)
+    let duration = -1;
+    // console.log('MM', metric, metricsList)
+
+    for (let metric of metricsList) {
+      // console.log('MM', metric.valueOf(), activeMetric.valueOf())
+      if (metric.type == activeMetric.type) {
+        duration = metric.calculator(password, newHashRate)
         break
       }
     }
@@ -117,9 +137,52 @@ function App() {
             }}
           />
         </Form.Field>
+
+        <Field id="hash-rate-selector">
+          <RadioButton
+            className='button is-outlined'
+            checked={hashRate === HashRates.hundred_per_hour}
+            onChange={() => updateHashRate(HashRates.hundred_per_hour)}
+            color="danger"
+            textColor="light"
+          >
+            100 / hr
+          </RadioButton>
+
+          <RadioButton
+            className='button is-outlined'
+            checked={hashRate === HashRates.ten_per_second}
+            onChange={() => updateHashRate(HashRates.ten_per_second)}
+            color="success"
+            textColor="light"
+          >
+            10 / s
+          </RadioButton>
+
+          <RadioButton
+            className='button is-outlined'
+            checked={hashRate === HashRates.ten_thousand_per_second}
+            onChange={() => updateHashRate(HashRates.ten_thousand_per_second)}
+            color="primary"
+            textColor="light"
+          >
+            1000 / s
+          </RadioButton>
+
+          <RadioButton
+            className='button is-outlined'
+            checked={hashRate === HashRates.ten_billion_per_second}
+            onChange={() => updateHashRate(HashRates.ten_billion_per_second)}
+            color="primary"
+            textColor="light"
+          >
+            1e10 / s
+          </RadioButton>
+        </Field>
+
         <p>{comment}</p>
-        
       </div>
+      
       <div className="cards-holder">
         {ZbcvbnMetric.cardComponent({ 
           'active': activeMetric.type == ZbcvbnMetric.type,

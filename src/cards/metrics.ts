@@ -1,3 +1,5 @@
+import { HashRates } from '../hash_rates'
+
 enum MetricTypes {
     zxcvbn,
     entropy,
@@ -13,7 +15,9 @@ type Metric = {
     type: MetricTypes,
     cardComponent: (props: MetricComponentProps) => React.ReactNode,
     descriptionComponent: () => React.ReactNode,
-    calculator: (password: string) => number,
+    calculator: (
+        password: string, hashrate: HashRates
+    ) => number,
 }
 
 export {type Metric, MetricTypes, type MetricComponentProps}

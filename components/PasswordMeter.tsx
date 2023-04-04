@@ -112,7 +112,7 @@ export const PasswordMeter = (
     return -sequential_numbers(password) * 2
   }
 
-  function isUpper(str) {
+  function isUpper(str: string) {
     return !/[a-z]/.test(str) && /[A-Z]/.test(str)
   }
 
@@ -132,7 +132,7 @@ export const PasswordMeter = (
     return -consecutive_uppercase(password) * 2
   }
 
-  function isLower(str) {
+  function isLower(str: string) {
     return !/[A-Z]/.test(str) && /[a-z]/.test(str)
   }
 
@@ -152,7 +152,7 @@ export const PasswordMeter = (
     return -consecutive_lowercase(password) * 2
   }
 
-  function isSequentialChars(str) {
+  function isSequentialChars(str: string) {
     return /(?:abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz)/.test(
       str
     )
@@ -174,7 +174,7 @@ export const PasswordMeter = (
   }
 
   const score = (password: string) => {
-    let score_val =
+    let score_val: number =
       password_length_score(password) +
       uppercase_letters_score(password) +
       lowercase_letters_score(password) +
@@ -190,8 +190,7 @@ export const PasswordMeter = (
 
     score_val = score_val > 100 ? 100 : score_val
     score_val = score_val < 0 ? 0 : score_val
-
-    return parseInt(score_val) + "%"
+    return `${Math.floor(score_val)}%`
   }
 
   const complexity_text = (password: string) => {
@@ -230,7 +229,7 @@ export const PasswordMeter = (
     return "#00b500"; // bright green
   };
 
-  const changePasswordColor = (password) => ({
+  const changePasswordColor = (password: string) => ({
     width: `${score(password)}`, // 0 - 100% here
     background: funcProgressColor(password), // color
     height: "7px", // no change
@@ -240,18 +239,19 @@ export const PasswordMeter = (
     <>
       <h3 className='text-center my-2'>Password Meter</h3>
 
-      <div className="progress" style={{ height: "7px" }}>
+      <div className="progress" style={{ 
+        height: "7px", backgroundColor: "#EEE"
+      }}>
         <div className="progress-bar" style={changePasswordColor(password)}></div>
       </div>
 
-      <table class='table'>
-        <thead class='thead-dark'>
+      <table className='table'>
+        <thead className='thead-dark'>
           <tr>
-            <th scope='col' colSpan='2'>
+            <th scope='col' colSpan={2}>
               Test Your Password
             </th>
-            <th scope='col'>Minimum Requirements</th>
-            <th scope='col'></th>
+            <th scope='col' colSpan={2}>Minimum Requirements</th>
           </tr>
         </thead>
 
@@ -259,8 +259,11 @@ export const PasswordMeter = (
           <tr>
             <th scope='row'>Score:</th>
             <td>{score(password)}</td>
-            <td rowSpan='2'>
-              Minimum 8 characters in length. Contains 3/4 of the following
+            <td rowSpan={3} colSpan={2} style={{
+              border: 'none'
+            }}>
+              Minimum 8 characters in length. <br/>
+              Contains 3/4 of the following
               items:
               <li>Uppercase Letters</li>
               <li>Lowercase Letters</li>
@@ -275,10 +278,10 @@ export const PasswordMeter = (
         </tbody>
       </table>
 
-      <table class='table'>
-        <thead class='thead-dark'>
+      <table className='table'>
+        <thead className='thead-dark'>
           <tr>
-            <th scope='col' colSpan='2'>
+            <th scope='col' colSpan={2}>
               Additions (+ve points to Score)
             </th>
             <th scope='col'>Type</th>
@@ -332,13 +335,14 @@ export const PasswordMeter = (
             <td>{symbols_score(password)}</td>
           </tr>
         </tbody>
-        <thead class='thead-dark'>
+        
+        <thead className='thead-dark'>
           <tr>
             {/* <th scope='col' colSpan='6'>
               Deductions
             </th> */}
 
-            <th scope='col' colSpan='2'>
+            <th scope='col' colSpan={2}>
               Deductions (-ve points to Score)
             </th>
             <th scope='col'>Type</th>

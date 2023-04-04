@@ -5,9 +5,10 @@ import textsuccess from "../src/index.scss";
 import textdanger from "../src/index.scss";
 import textslightdanger from "../src/index.scss";
 
-export const Haveibeenpwned = ({ password }) => {
-    const [hashNum, setHashNum] = useState()
-    console.log({ password });
+export const Haveibeenpwned = (
+  { password }: { password: string }
+) => {
+    const [hashNum, setHashNum] = useState(0)
     var passhash = sha1(password);
     var link = `https://api.pwnedpasswords.com/range/`+passhash.slice(0, 5);
 
@@ -19,17 +20,20 @@ export const Haveibeenpwned = ({ password }) => {
     const returnNumber = () => {
         axios.get(link)
         .then((response) => {
-            var hashes = {}
-            var rows = response.data.split('\n');
-            for (var row in rows) {
-                var hashdata = rows[row].split(':');
-                hashes[hashdata[0]] = hashdata[1];
+            const hashes: Map<string, string> = new Map();
+            const rows = response.data.split('\n');
+
+            for (let row in rows) {
+              const hashdata: Array<string> = rows[row].split(':');
+              hashes.set(hashdata[0], hashdata[1])
             }
-            var hashsuffix = passhash.slice(5, 40).toUpperCase();
-            var found = hashes[hashsuffix];
+
+            const hashsuffix = passhash.slice(5, 40).toUpperCase();
+            const found = hashes.get(hashsuffix);
             console.log(found);
+
             if (found) {
-              setHashNum(found)
+              setHashNum(parseInt(found))
             } else {
               setHashNum(0)
             }
