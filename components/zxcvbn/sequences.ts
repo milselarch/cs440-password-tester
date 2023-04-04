@@ -1,4 +1,4 @@
-var sequences = [
+const sequences: Array<string> = [
   "012",
   "123",
   "234",

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { MetricTypes, Metric, MetricComponentProps } from './metrics'
 import { Card } from 'react-bulma-components';
+import { HashRates } from '../hash_rates'
 
 import zxcvbn from 'zxcvbn';
 import classNames from 'classnames';
@@ -41,13 +42,23 @@ const metric: Metric = {
   type: MetricTypes.zxcvbn,
   cardComponent: CardRenderer,
   descriptionComponent: DescriptionRenderer,
-  calculator: (password: string) => {
+
+  calculator: (password: string, hashrate: HashRates) => {
     const result = zxcvbn(password);
-    return Number(
-      result.crack_times_seconds.offline_slow_hashing_1e4_per_second
-    )
+    console.log("HASH_RATE", hashrate)
+
+    if (hashrate === HashRates.hundred_per_hour) {
+      return Number(result.crack_times_seconds.online_throttling_100_per_hour)
+    } else if (hashrate === HashRates.ten_per_second) {
+      return Number(result.crack_times_seconds.online_no_throttling_10_per_second)
+    } else if (hashrate === HashRates.ten_thousand_per_second) {
+      return Number(result.crack_times_seconds.offline_slow_hashing_1e4_per_second)
+    } else if (hashrate === HashRates.ten_billion_per_second) {
+      return Number(result.crack_times_seconds.offline_fast_hashing_1e10_per_second)
+    }
+
+    return 0
   }
-  
 }
 
 export default metric

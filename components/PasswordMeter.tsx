@@ -1,53 +1,56 @@
 import React, { useState } from "react"
 
-export const PasswordMeter = ({ password }) => {
+export const PasswordMeter = (
+  {password} : {password: string}
+) => {
   console.log("Component loaded")
 
-  const password_length_score = (password) => {
+  const password_length_score = (password: string) => {
     return password.length * 4
   }
-  const uppercase_letters = (password) => {
+  const uppercase_letters = (password: string) => {
+    console.log("PASS", [password])
     var occur = password.length - password.replace(/[A-Z]/g, "").length
     return occur
   }
 
-  const uppercase_letters_score = (password) => {
+  const uppercase_letters_score = (password: string) => {
     return uppercase_letters(password) * 2
   }
 
-  const lowercase_letters = (password) => {
+  const lowercase_letters = (password: string) => {
     var occur = password.length - password.replace(/[a-z]/g, "").length
     return occur
   }
 
-  const lowercase_letters_score = (password) => {
+  const lowercase_letters_score = (password: string) => {
     return lowercase_letters(password) * 2
   }
 
-  const letters = (password) => {
+  const letters = (password: string) => {
     return uppercase_letters(password) + lowercase_letters(password)
   }
 
-  const numbers = (password) => {
+  const numbers = (password: string) => {
     var numCount = password.length - password.replace(/[0-9]/g, "").length
     return numCount
   }
 
-  const numbers_score = (password) => {
+  const numbers_score = (password: string) => {
     return numbers(password) * 4
   }
 
-  const symbols = (password) => {
+  const symbols = (password: string) => {
     var specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gi
     var allFoundCharacters = password.match(specialChars)
     return allFoundCharacters ? allFoundCharacters.length : 0
   }
 
-  const symbols_score = (password) => {
+  const symbols_score = (password: string) => {
     return symbols(password) * 6
   }
 
-  const Letters_Only = (password) => {
+  const Letters_Only = (password: string) => {
     return uppercase_letters(password) + lowercase_letters(password) >= 1 &&
       numbers(password) === 0 &&
       symbols(password) === 0
@@ -55,11 +58,11 @@ export const PasswordMeter = ({ password }) => {
       : false
   }
 
-  const Letters_Only_score = (password) => {
+  const Letters_Only_score = (password: string) => {
     return Letters_Only(password) ? -password.length : 0
   }
 
-  const Numbers_Only = (password) => {
+  const Numbers_Only = (password: string) => {
     return uppercase_letters(password) + lowercase_letters(password) === 0 &&
       numbers(password) >= 1 &&
       symbols(password) === 0
@@ -67,23 +70,18 @@ export const PasswordMeter = ({ password }) => {
       : false
   }
 
-  const Numbers_Only_score = (password) => {
+  const Numbers_Only_score = (password: string) => {
     return Numbers_Only(password) ? -password.length : 0
   }
 
-  function isNumber(n) {
+  function isNumber(n: any): boolean {
     return !isNaN(parseInt(n)) && !isNaN(n - 0)
   }
 
-  const consecutive_numbers = (password) => {
+  const consecutive_numbers = (password: string) => {
     let arr = password.split("")
     let count = 0
 
-    for (var i = 0; i < arr.length; i += 1) {
-      if (isNumber(arr[i])) {
-        arr[i] = parseInt(arr[i])
-      }
-    }
     for (var i = 0; i < arr.length; i += 1) {
       if (isNumber(arr[i]) && isNumber(arr[i + 1])) {
         count++
@@ -92,40 +90,33 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const consecutive_numbers_score = (password) => {
+  const consecutive_numbers_score = (password: string) => {
     return -consecutive_numbers(password) * 2
   }
 
-  const sequential_numbers = (password) => {
-    let arr = password.split("")
+  const sequential_numbers = (password: string) => {
+    const arr = password.split("")
     let count = 0
 
-    for (var i = 0; i < arr.length; i += 1) {
-      if (isNumber(arr[i])) {
-        arr[i] = parseInt(arr[i])
-      }
-    }
     for (var i = 0; i < arr.length - 1; i += 1) {
-      if (
-        isNumber(arr[i]) &&
-        isNumber(arr[i + 1]) &&
-        (arr[i] - 1 === arr[i + 1] || arr[i] + 1 === arr[i + 1])
-      ) {
-        count++
-      }
+      if (!(isNumber(arr[i]) && isNumber(arr[i + 1]))) { continue }
+
+      const currentNumber = parseInt(arr[i])
+      const nextNumber = parseInt(arr[i+1])
+      if (currentNumber + 1 === nextNumber) { count++ }
     }
     return count
   }
 
-  const sequential_numbers_score = (password) => {
+  const sequential_numbers_score = (password: string) => {
     return -sequential_numbers(password) * 2
   }
 
-  function isUpper(str) {
+  function isUpper(str: string) {
     return !/[a-z]/.test(str) && /[A-Z]/.test(str)
   }
 
-  const consecutive_uppercase = (password) => {
+  const consecutive_uppercase = (password: string) => {
     let arr = password.split("")
     let count = 0
 
@@ -137,15 +128,15 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const consecutive_upper_score = (password) => {
+  const consecutive_upper_score = (password: string) => {
     return -consecutive_uppercase(password) * 2
   }
 
-  function isLower(str) {
+  function isLower(str: string) {
     return !/[A-Z]/.test(str) && /[a-z]/.test(str)
   }
 
-  const consecutive_lowercase = (password) => {
+  const consecutive_lowercase = (password: string) => {
     let arr = password.split("")
     let count = 0
 
@@ -157,17 +148,17 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const consecutive_lowercase_score = (password) => {
+  const consecutive_lowercase_score = (password: string) => {
     return -consecutive_lowercase(password) * 2
   }
 
-  function isSequentialChars(str) {
+  function isSequentialChars(str: string) {
     return /(?:abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz)/.test(
       str
     )
   }
 
-  const lowercase_sequential_count = (password) => {
+  const lowercase_sequential_count = (password: string) => {
     let count = 0
     password = password.toLowerCase()
     for (var i = 0; i < password.length; i += 1) {
@@ -178,12 +169,12 @@ export const PasswordMeter = ({ password }) => {
     return count
   }
 
-  const letters_sequential_score = (password) => {
+  const letters_sequential_score = (password: string) => {
     return -lowercase_sequential_count(password) * 2
   }
 
-  const score = (password) => {
-    let score_val =
+  const score = (password: string) => {
+    let score_val: number =
       password_length_score(password) +
       uppercase_letters_score(password) +
       lowercase_letters_score(password) +
@@ -199,11 +190,10 @@ export const PasswordMeter = ({ password }) => {
 
     score_val = score_val > 100 ? 100 : score_val
     score_val = score_val < 0 ? 0 : score_val
-
-    return parseInt(score_val) + "%"
+    return `${Math.floor(score_val)}%`
   }
 
-  const complexity_text = (password) => {
+  const complexity_text = (password: string) => {
     /*
     Empty string: Enter a value
     0-19: very weak
@@ -226,7 +216,7 @@ export const PasswordMeter = ({ password }) => {
     return "Very Weak"
   }
 
-  const funcProgressColor = (password) => {
+  const funcProgressColor = (password: string) => {
     
     if (password.length <= 2)
       return "#828282"; // grey
@@ -239,7 +229,7 @@ export const PasswordMeter = ({ password }) => {
     return "#00b500"; // bright green
   };
 
-  const changePasswordColor = (password) => ({
+  const changePasswordColor = (password: string) => ({
     width: `${score(password)}`, // 0 - 100% here
     background: funcProgressColor(password), // color
     height: "7px", // no change
@@ -249,18 +239,19 @@ export const PasswordMeter = ({ password }) => {
     <>
       <h3 className='text-center my-2'>Password Meter</h3>
 
-      <div className="progress" style={{ height: "7px" }}>
+      <div className="progress" style={{ 
+        height: "7px", backgroundColor: "#EEE"
+      }}>
         <div className="progress-bar" style={changePasswordColor(password)}></div>
       </div>
 
-      <table class='table'>
-        <thead class='thead-dark'>
+      <table className='table'>
+        <thead className='thead-dark'>
           <tr>
-            <th scope='col' colSpan='2'>
+            <th scope='col' colSpan={2}>
               Test Your Password
             </th>
-            <th scope='col'>Minimum Requirements</th>
-            <th scope='col'></th>
+            <th scope='col' colSpan={2}>Minimum Requirements</th>
           </tr>
         </thead>
 
@@ -268,8 +259,11 @@ export const PasswordMeter = ({ password }) => {
           <tr>
             <th scope='row'>Score:</th>
             <td>{score(password)}</td>
-            <td rowSpan='2'>
-              Minimum 8 characters in length. Contains 3/4 of the following
+            <td rowSpan={3} colSpan={2} style={{
+              border: 'none'
+            }}>
+              Minimum 8 characters in length. <br/>
+              Contains 3/4 of the following
               items:
               <li>Uppercase Letters</li>
               <li>Lowercase Letters</li>
@@ -284,10 +278,10 @@ export const PasswordMeter = ({ password }) => {
         </tbody>
       </table>
 
-      <table class='table'>
-        <thead class='thead-dark'>
+      <table className='table'>
+        <thead className='thead-dark'>
           <tr>
-            <th scope='col' colSpan='2'>
+            <th scope='col' colSpan={2}>
               Additions (+ve points to Score)
             </th>
             <th scope='col'>Type</th>
@@ -341,13 +335,14 @@ export const PasswordMeter = ({ password }) => {
             <td>{symbols_score(password)}</td>
           </tr>
         </tbody>
-        <thead class='thead-dark'>
+        
+        <thead className='thead-dark'>
           <tr>
             {/* <th scope='col' colSpan='6'>
               Deductions
             </th> */}
 
-            <th scope='col' colSpan='2'>
+            <th scope='col' colSpan={2}>
               Deductions (-ve points to Score)
             </th>
             <th scope='col'>Type</th>
