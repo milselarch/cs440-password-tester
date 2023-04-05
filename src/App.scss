@@ -14,7 +14,7 @@
 }
 
 @font-face {
-  font-family: "Babas Neue";
+  font-family: "Bebas Neue";
   src:
     url("./assets/fonts/babas_neue.ttf") format("truetype");
     /* Add other formats as you see fit */
@@ -22,6 +22,10 @@
 
 * {
   font-family: "Open Sans";
+}
+
+h2 {
+  font-family: 'Bebas Neue';
 }
 
 .card {
