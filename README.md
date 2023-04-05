@@ -2,6 +2,8 @@
 
 React + Typescript + Vite password strength tester website for CS440 Foundations of Cybersecurity mod
 
+![Screenshot from 2023-04-05 09-08-06](https://user-images.githubusercontent.com/11241733/229969303-32641a04-8249-4172-a781-04bc97e4367d.png)
+
 ## About this project
 In this project, G1T5 design a password strength analyzer.
 1. ZXCVBN algorithm designed by Dropbox
