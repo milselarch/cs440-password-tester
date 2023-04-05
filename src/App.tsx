@@ -166,7 +166,7 @@ function App() {
             color="primary"
             textColor="light"
           >
-            1000 / s
+            10000 / s
           </RadioButton>
 
           <RadioButton

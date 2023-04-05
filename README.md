@@ -1,5 +1,7 @@
 # cs440-password-tester
 
+React + Typescript + Vite password strength tester website for CS440 Foundations of Cybersecurity mod
+
 ## About this project
 In this project, G1T5 design a password strength analyzer.
 1. ZXCVBN algorithm designed by Dropbox
